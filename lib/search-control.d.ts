@@ -1,6 +1,5 @@
 import * as React from "react";
 import { BingMap, OpenStreetMap } from "./Providers";
-import PropTypes from "prop-types";
 import { Map as LeafletMap, LatLng } from "leaflet";
 import "../css/index.css";
 export interface SearchControlProps {
@@ -34,7 +33,7 @@ interface SearchControlState {
     closeButton: boolean;
     showInfo: boolean;
 }
-declare type ItemData = {
+type ItemData = {
     latitude: number;
     longitude: number;
     name: string;
@@ -55,16 +54,6 @@ declare class SearchControl extends React.Component<SearchControlProps, SearchCo
     inputValueSetter: Function;
     selectbox: React.RefObject<HTMLUListElement>;
     constructor(props: SearchControlProps);
-    static propTypes: {
-        provider: PropTypes.Requireable<string>;
-        providerKey: PropTypes.Requireable<string>;
-        inputPlaceholder: PropTypes.Requireable<string>;
-        coords: PropTypes.Requireable<(number | null | undefined)[]>;
-        closeResultsOnClick: PropTypes.Requireable<boolean>;
-        openSearchOnLoad: PropTypes.Requireable<boolean>;
-        searchBounds: PropTypes.Requireable<any[]>;
-        providerOptions: PropTypes.Requireable<object>;
-    };
     static defaultProps: SearchControlProps;
     setLock: (value: boolean) => void;
     openSearch: () => void;
@@ -83,6 +72,6 @@ declare class SearchControl extends React.Component<SearchControlProps, SearchCo
     setMaxHeight: () => void;
     componentDidMount(): void;
     componentDidUpdate(): void;
-    render(): JSX.Element;
+    render(): React.JSX.Element;
 }
 export { SearchControl };

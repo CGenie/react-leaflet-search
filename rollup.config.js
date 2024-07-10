@@ -54,7 +54,6 @@ const plugins = [
 const globals = {
     leaflet: "L",
     react: "React",
-    "prop-types": "PropTypes",
     "react-dom": "ReactDOM",
     "react-leaflet": "ReactLeaflet"
 };

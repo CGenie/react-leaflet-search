@@ -1,5 +1,5 @@
 import { Provider, ProviderOptions } from "./Provider";
-export declare type OpenStreetMapResponse = Array<{
+export type OpenStreetMapResponse = Array<{
     boundingbox: string[];
     lat: number;
     lon: number;

@@ -3,5 +3,5 @@ interface SearchCloseButtonProps {
     className?: string;
     onClick?: (e: React.SyntheticEvent<HTMLButtonElement>) => any;
 }
-declare function SearchCloseButton({ className, onClick }: SearchCloseButtonProps): JSX.Element;
+declare function SearchCloseButton({ className, onClick }: SearchCloseButtonProps): React.JSX.Element;
 export { SearchCloseButton };

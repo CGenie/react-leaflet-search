@@ -1,8 +1,7 @@
-import { Control, DomUtil, DomEvent, Icon, LatLng, Map, ZoomPanOptions } from "leaflet";
+import { Icon, LatLng, ZoomPanOptions } from "leaflet";
 import React from "react";
-// import PropTypes from "prop-types";
-import ReactDOM from "react-dom";
-import { Popup, MapControl, Marker, LeafletContext, MapControlProps } from "react-leaflet";
+import { Popup, Marker } from "react-leaflet";
+import { useLeafletContext } from '@react-leaflet/core'
 import { SearchControl, SearchControlProps } from "./search-control";
 
 type SearchInfo = {
@@ -10,31 +9,125 @@ type SearchInfo = {
     info: string | Array<string>;
     raw: Record<string, unknown>;
 };
-export type ReactLeafletSearchProps = MapControlProps &
+export type ReactLeafletSearchProps = // MapControlProps &
     SearchControlProps & {
-        showMarker?: boolean;
-        showPopup?: boolean;
-        zoom: number;
-        mapStateModifier?: "flyTo" | "setView" | ((l: LatLng) => void);
-        zoomPanOptions?: ZoomPanOptions;
-        customProvider?: { search: (value: string) => Promise<any> };
-        markerIcon?: Icon;
-        popUp?: (i: { latLng: LatLng; info: string | Array<string>; raw: Object }) => JSX.Element;
-        children?: (info: SearchInfo) => JSX.Element | null;
-        onChange?: (info: SearchInfo) => void;
-    };
+    showMarker?: boolean;
+    showPopup?: boolean;
+    zoom: number;
+    mapStateModifier?: "flyTo" | "setView" | ((l: LatLng) => void);
+    zoomPanOptions?: ZoomPanOptions;
+    customProvider?: { search: (value: string) => Promise<any> };
+    markerIcon?: Icon;
+    popUp?: (i: { latLng: LatLng; info: string | Array<string>; raw: Object }) => JSX.Element;
+    children?: (info: SearchInfo) => JSX.Element | null;
+    onChange?: (info: SearchInfo) => void;
+};
 
 interface ReactLeafletSearchState {
     search: LatLng | false;
     info: any;
 }
 
+
+export default function ReactLeafletSearch(props: ReactLeafletSearchProps) {
+    const context = useLeafletContext();
+    let searchInfo: SearchInfo | null = null;
+    let [state, setState] = React.useState({
+        search: false,
+        info: false
+    } as ReactLeafletSearchState);
+
+    let handler = ({ event, payload }: { event: "add" | "remove"; payload?: SearchInfo }) => {
+        if (event === "add" && payload) {
+            props.onChange?.(payload);
+            let latLng = payload.latLng;
+            let info = payload.info;
+            searchInfo = {
+                info,
+                latLng,
+                raw: payload.raw
+            };
+            const popUpStructure = (
+                <div>
+                    <p>{Array.isArray(info) ? info.toString() : info}</p>
+                    <div className="search-control-popup-seperator"></div>
+                    <div>{`latitude: ${latLng.lat}`}</div>
+                    <div>{`longitude: ${latLng.lng}`}</div>
+                </div>
+            );
+            setState({ search: latLng, info });
+        } else {
+            setState(s => ({ ...s, search: false }));
+        }
+    };
+
+    let extraCpt = searchInfo && state.search ? (
+        props.children ? (
+            props.children(searchInfo)
+        ) : props.showMarker ? (
+            <Marker
+                key={`marker-search-${state.search.toString()}`}
+                position={state.search}
+                {...(props.markerIcon ? { icon: props.markerIcon } : {})}
+            >
+                { props.showPopup && props.popUp ? (
+                    props.popUp(searchInfo)
+                ) : (
+                    <Popup>
+                        <span>{state.info}</span>
+                    </Popup>
+                    )
+                }
+            </Marker>
+        ) : null
+    ) : null;
+
+    return (
+        <div>
+            <SearchControl
+                className={props.className}
+                provider={props.provider}
+                customProvider={props.customProvider}
+                providerOptions={props.providerOptions}
+                openSearchOnLoad={props.openSearchOnLoad}
+                closeResultsOnClick={props.closeResultsOnClick}
+                inputPlaceholder={props.inputPlaceholder}
+                search={props.search}
+                map={context.map}
+                handler={handler}
+                {...(props.tabIndex !== undefined ? { tabIndex: props.tabIndex } : {})}
+            />
+            { extraCpt }
+        </div>
+    );
+}
+
+ReactLeafletSearch.defaultProps = {
+    inputPlaceholder: "Search Lat,Lng",
+    showMarker: true,
+    showPopup: true,
+    zoom: 10,
+    closeResultsOnClick: false,
+    openSearchOnLoad: false,
+    search: undefined,
+    provider: "OpenStreetMap",
+    mapStateModifier: "flyTo",
+    zoomPanOptions: {
+        animate: true,
+        duration: 0.25,
+        easeLinearity: 0.25,
+        noMoveStart: false
+    }
+};
+
+/*
 export default class ReactLeafletSearch extends MapControl<ReactLeafletSearchProps> {
     div: HTMLDivElement;
     map?: Map;
     SearchInfo: SearchInfo | null;
     state: ReactLeafletSearchState;
     markerRef: React.RefObject<Marker>;
+
     constructor(props: ReactLeafletSearchProps, context: LeafletContext) {
         super(props);
         this.div = DomUtil.create("div", "leaflet-search-wrap") as HTMLDivElement;
@@ -52,7 +145,8 @@ export default class ReactLeafletSearch extends MapControl<ReactLeafletSearchPro
     createLeafletElement(props: ReactLeafletSearchProps) {
         const ReactLeafletSearchControl = Control.extend({
             onAdd: (map: Map) => this.div,
-            onRemove: (map: Map) => {}
+            onRemove: (map: Map) => {
+            }
         });
         return new ReactLeafletSearchControl(props);
     }
@@ -84,6 +178,7 @@ export default class ReactLeafletSearch extends MapControl<ReactLeafletSearchPro
             this.flyTo();
         });
     }
+
     flyTo() {
         if (this.state.search) {
             switch (this.props.mapStateModifier) {
@@ -184,3 +279,5 @@ export default class ReactLeafletSearch extends MapControl<ReactLeafletSearchPro
         }
     };
 }
+
+*/

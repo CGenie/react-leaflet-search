@@ -1,5 +1,5 @@
 import React from "react";
-declare type Item = {
+type Item = {
     latitude: number;
     longitude: number;
     name: string;

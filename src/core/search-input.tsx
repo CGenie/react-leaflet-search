@@ -50,7 +50,7 @@ const SearchInputCore = (
     ref: React.Ref<HTMLInputElement>
 ) => {
     const [value, setValue] = React.useState(initialValue);
-    const handlerDefaults = React.useCallback((e, cb) => {
+    const handlerDefaults = React.useCallback((e: any, cb: any) => {
         // e.preventDefault();
         // e.stopPropagation();
         cb(e);

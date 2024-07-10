@@ -5,5 +5,5 @@ interface SearchIconButtonProps {
     onMouseEnter?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => any;
     onMouseLeave?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => any;
 }
-declare function SearchIconButton({ className, onClick, onMouseEnter, onMouseLeave }: SearchIconButtonProps): JSX.Element;
+declare function SearchIconButton({ className, onClick, onMouseEnter, onMouseLeave }: SearchIconButtonProps): React.JSX.Element;
 export { SearchIconButton };

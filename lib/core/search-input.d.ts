@@ -22,5 +22,5 @@ interface SearchInputProps {
     onSubmit?: (e: React.FormEvent<HTMLInputElement>) => any;
 }
 declare const SearchInput: React.ForwardRefExoticComponent<SearchInputProps & React.RefAttributes<HTMLInputElement>>;
-declare function SearchInputWrapper(): JSX.Element;
+declare function SearchInputWrapper(): React.JSX.Element;
 export { SearchInputWrapper, SearchInput };

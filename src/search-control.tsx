@@ -1,7 +1,6 @@
 import * as React from "react";
 import Providers from "./Providers";
 import { BingMap, OpenStreetMap } from "./Providers";
-import PropTypes from "prop-types";
 import { Map as LeafletMap, LatLng } from "leaflet";
 import "../css/index.css";
 import { SearchInput } from "./core/search-input";
@@ -86,16 +85,16 @@ class SearchControl extends React.Component<SearchControlProps, SearchControlSta
         }
     }
 
-    static propTypes = {
-        provider: PropTypes.string,
-        providerKey: PropTypes.string,
-        inputPlaceholder: PropTypes.string,
-        coords: PropTypes.arrayOf(PropTypes.number),
-        closeResultsOnClick: PropTypes.bool,
-        openSearchOnLoad: PropTypes.bool,
-        searchBounds: PropTypes.array,
-        providerOptions: PropTypes.object,
-    };
+    // static propTypes = {
+    //     provider: PropTypes.string,
+    //     providerKey: PropTypes.string,
+    //     inputPlaceholder: PropTypes.string,
+    //     coords: PropTypes.arrayOf(PropTypes.number),
+    //     closeResultsOnClick: PropTypes.bool,
+    //     openSearchOnLoad: PropTypes.bool,
+    //     searchBounds: PropTypes.array,
+    //     providerOptions: PropTypes.object,
+    // };
 
     static defaultProps: SearchControlProps = {
         inputPlaceholder: "Search Lat,Lng",
